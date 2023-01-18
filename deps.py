@@ -31,6 +31,7 @@ def get_db():
         db.close()
 
 
+"""
 async def get_current_user(token: str = Depends(reuse_oauth), db: Session = Depends(get_db)) -> schemas.UserInfo:
     try:
         payload = jwt.decode(
@@ -64,4 +65,4 @@ async def get_current_user(token: str = Depends(reuse_oauth), db: Session = Depe
         email=user.email
     )
     return data
-
+"""

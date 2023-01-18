@@ -11,13 +11,14 @@ from utils import (
     verify_password
 )
 
-from deps import get_current_user, get_db
+from deps import get_db
 import crud
 import schemas
-from utils import get_retain_username
+
 router = APIRouter()
 
 
+"""
 @router.post('/signup', summary="Create new user")
 async def create_user(data: schemas.UserRegister, db: Session = Depends(get_db)):
     print(data.dict())
@@ -74,7 +75,9 @@ async def create_user(data: schemas.UserRegister, db: Session = Depends(get_db))
             detail=str(e)
         )
 
+"""
 
+"""
 @router.post('/login', summary="Create access and refresh tokens for user")
 async def login(user: schemas.UserAuth, db: Session = Depends(get_db)):
     # user = db.get(form_data.username, None)
@@ -111,4 +114,5 @@ async def check_user_exists(username: str, db: Session = Depends(get_db)):
 
     user = crud.get_user_by_user_name(db, username)
     return schemas.Response(data=user is not None)
+"""
 

@@ -4,6 +4,28 @@ from typing import Any, Union, List, Optional
 from pydantic import BaseModel, Field, ValidationError, validator
 
 
+class BoxCreate(BaseModel):
+    """盲盒信息"""
+    wx_id: str = Field(..., description="微信id")
+    gender: int = Field(..., description="性别")
+    visitor_id: str = Field(..., description="访问者id")
+
+
+class Response(BaseModel):
+    code: Optional[int] = 0
+    msg: Optional[str]  = "ok"
+    data: Any = None
+
+    class Config:
+        schema_extra = {
+            "example": {
+                "code": 0,
+                "msg": "success",
+                "data": {}
+            }
+        }
+
+
 class TokenSchema(BaseModel):
     access_token: str
     refresh_token: str
