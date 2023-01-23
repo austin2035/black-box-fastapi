@@ -8,6 +8,7 @@ class BoxCreate(BaseModel):
     """盲盒信息"""
     wx_id: str = Field(..., description="微信id")
     gender: int = Field(..., description="性别")
+    age: int = Field(..., description="年龄")
     visitor_id: str = Field(..., description="访问者id")
 
 

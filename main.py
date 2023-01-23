@@ -17,6 +17,8 @@ app = FastAPI()
 
 origins = [
     "http://localhost",
+    "https://react-raffle-box.vercel.app",
+    "https://box.5050520.xyz"
 ]
 
 
@@ -34,14 +36,18 @@ async def get_root():
     return schemas.Response()
 
 
-@app.post("/raffle_box")
-async def raffle_box(box: schemas.BoxCreate, db: Session = Depends(get_db)):
-    # 添加盲盒
+@app.put("/box")
+async def put_box(box: schemas.BoxCreate, db: Session = Depends(get_db)):
+    """添加盲盒"""
     try:
         crud.add_box(db, box)
     except Exception as e:
-        print("添加盲盒失败", e)
+        print(e)
+    return schemas.Response()
 
+
+@app.post("/raffle_box")
+async def raffle_box(box: schemas.BoxCreate, db: Session = Depends(get_db)):
 
     turn_gender = 0 if box.gender else 1
 
