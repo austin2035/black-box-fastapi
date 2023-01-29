@@ -6,10 +6,10 @@ from pydantic import BaseModel, Field, ValidationError, validator
 
 class BoxCreate(BaseModel):
     """盲盒信息"""
-    wx_id: str = Field(..., description="微信id")
-    gender: int = Field(..., description="性别")
+    wechat: str = Field(..., description="微信id")
+    gender: str = Field(..., description="性别")
     age: int = Field(..., description="年龄")
-    visitor_id: str = Field(..., description="访问者id")
+    depositor_id: str = Field(..., description="访问者id")
 
 
 class Response(BaseModel):

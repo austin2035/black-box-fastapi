@@ -17,10 +17,8 @@ app = FastAPI()
 
 origins = [
     "http://localhost",
-    "https://react-raffle-box.vercel.app",
-    "https://box.5050520.xyz"
+    "https://togetherblackbox.com"
 ]
-
 
 app.add_middleware(
     CORSMiddleware,
@@ -46,25 +44,27 @@ async def put_box(box: schemas.BoxCreate, db: Session = Depends(get_db)):
     return schemas.Response()
 
 
-@app.post("/raffle_box")
-async def raffle_box(box: schemas.BoxCreate, db: Session = Depends(get_db)):
+@app.get("/visitor/extract_count/{visitor_id}")
+def check_visitor_status(visitor_id: str, db: Session = Depends(get_db)):
+    """检查访客是否已经抽取过盲盒"""
+    visitor_extract_num = crud.get_visitor_extract_number(db, visitor_id)
+    if visitor_extract_num >= 1:
+        return schemas.Response(code=1, msg="该访客已经抽取过", data=True)
+    return schemas.Response(data=False)
 
-    turn_gender = 0 if box.gender else 1
 
-    # 获取盲盒数量
-    box_number = crud.get_box_number(db, turn_gender)
-    if box_number == 0:
-        return schemas.Response(code=1, msg="相反性别盲盒数量为0")
+@app.get("/box/count/{visitor_id}")
+def get_available_box_number(visitor_id: str, db: Session = Depends(get_db)):
+    count = crud.get_available_box_number(db, visitor_id)
+    return schemas.Response(data=count)
 
-    # 获取访客的抽奖次数
-    visitor_raffle_number = crud.get_visitor_raffle_number(db, box.visitor_id)
-    if visitor_raffle_number >= 1:
-        return schemas.Response(code=2, msg="该访客已经抽取过")
 
-    # 抽取盲盒
-    box_new = crud.get_a_box(db, turn_gender)
-    data = {"gender": "男" if box_new.gender else "女", "wx_id": box_new.wx_id, "age": box_new.age, "desc": box_new.desc}
-    # 更新盲盒
-    crud.update_box(db, box_new.id, box.visitor_id)
-
+@app.get("/box/{visitor_id}")
+def extract_box_for_visitor(visitor_id: str, db: Session = Depends(get_db)):
+    # 为访客抽取一个盲盒
+    data = crud.get_available_box_for_visitor(db, visitor_id)
+    print(data)
+    if not data:
+        return schemas.Response(code=1, msg="没有可用的盲盒")
     return schemas.Response(data=data)
+
