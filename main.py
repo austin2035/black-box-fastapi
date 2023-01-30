@@ -17,7 +17,8 @@ app = FastAPI()
 
 origins = [
     "http://localhost",
-    "https://togetherblackbox.com"
+    "https://togetherblackbox.com",
+    "https://www.togetherblackbox.com",
 ]
 
 app.add_middleware(
