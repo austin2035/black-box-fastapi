@@ -66,7 +66,11 @@ def get_available_box_for_visitor(db: Session, visitor_id: str):
 
     target_gender = '2' if data.gender == '1' else '1'
 
-    res = db.query(models.Box).filter(models.Box.gender == target_gender, models.Box.status == False).limit(1).first()
+    res = db.query(models.Box).filter(
+        models.Box.gender == target_gender,
+        models.Box.status == False,
+        models.Box.age.between(data.age - 5, data.age + 5)
+    ).limit(1).first()
     if not res:
         return None
     result = {'age': res.age, 'gender': res.gender, 'wechat': res.wechat}
