@@ -15,3 +15,10 @@ class Box(Base):
     status = Column(Boolean, default=False, index=True)
     depositor_id = Column(CHAR(32))
     extractor_id = Column(CHAR(32), index=True)
+    # rank， 可抽取次数
+    rank = Column(Integer, default=0, index=True)
+    # 用户投放时间
+    put_time = Column(Integer, index=True)
+
+
+

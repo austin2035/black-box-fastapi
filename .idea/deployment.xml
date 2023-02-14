@@ -1,11 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PublishConfigData" autoUpload="Always" remoteFilesAllowedToDisappearOnAutoupload="false">
+  <component name="PublishConfigData" autoUpload="Always" serverName="root@light.lookcos.cn:10086 agent" remoteFilesAllowedToDisappearOnAutoupload="false">
     <serverData>
-      <paths name="root@light.lookcos.cn:10086">
+      <paths name="root@light.lookcos.cn:10086 agent">
         <serverdata>
           <mappings>
-            <mapping deploy="/var/server/py_raffle_box" local="$PROJECT_DIR$" web="/" />
+            <mapping deploy="/var/server/py_raffle_box" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="root@light.lookcos.cn:10086 agent (2)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/var/server/py_raffle_box/" local="$PROJECT_DIR$" />
           </mappings>
         </serverdata>
       </paths>

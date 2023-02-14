@@ -70,7 +70,7 @@ def extract_box_for_visitor(visitor_id: str, db: Session = Depends(get_db)):
     if not data:
         visitor = crud.get_visitor_data(db, visitor_id)
         # 如果访客是男性，那么就返回固定值
-        if visitor.gender == '1':
+        if visitor and visitor.gender == '1':
             return schemas.Response(data={'age': 25, 'gender': '2', 'wechat': 'dece38'})
 
         # 如果访客是女性，就没有可用的盲盒
