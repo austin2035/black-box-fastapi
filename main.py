@@ -18,6 +18,7 @@ app = FastAPI()
 origins = [
     "http://localhost",
     "https://togetherblackbox.com",
+    "https://dev.togetherblackbox.com",
     "https://www.togetherblackbox.com",
 ]
 
@@ -28,6 +29,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+app.include_router(user.router, prefix="/user", tags=["user"])
 
 
 @app.get("/")
@@ -43,15 +47,6 @@ async def put_box(box: schemas.BoxCreate, db: Session = Depends(get_db)):
     except Exception as e:
         print(e)
     return schemas.Response()
-
-
-@app.get("/visitor/extract_count/{visitor_id}")
-def check_visitor_status(visitor_id: str, db: Session = Depends(get_db)):
-    """检查访客是否已经抽取过盲盒"""
-    visitor_extract_num = crud.get_visitor_extract_number(db, visitor_id)
-    if visitor_extract_num >= 1:
-        return schemas.Response(code=1, msg="该访客已经抽取过", data=True)
-    return schemas.Response(data=False)
 
 
 @app.get("/box/count/{visitor_id}")

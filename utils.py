@@ -1,14 +1,15 @@
 # -*- coding=utf-8
 
-from passlib.context import CryptContext
-import os
 import base64
-from datetime import datetime, timedelta
-from typing import Union, Any
-from jose import jwt
+import os
 import re
 import sys
+from datetime import datetime, timedelta
+from typing import Union, Any
 
+import pytz
+from jose import jwt
+from passlib.context import CryptContext
 
 ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24 * 14  # 14 days
 REFRESH_TOKEN_EXPIRE_MINUTES = 60 * 24 * 14  # 14 days
@@ -69,5 +70,16 @@ def is_username(username: str) -> bool:
     :return:
     """
     if re.match("^[a-zA-Z0-9_-]{4,16}$", username) is not None:
+        return True
+    return False
+
+def is_today(timestamp) -> bool:
+    """
+    判断是否为今天, pytz 指定加拿大多伦多时区
+    :param timestamp:
+    :return:
+    """
+    today = datetime.now(pytz.timezone("Canada/Eastern")).date()
+    if timestamp.date() == today:
         return True
     return False

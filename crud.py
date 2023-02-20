@@ -1,4 +1,6 @@
 # -*- coding:utf-8 -*-
+import time
+
 import math
 
 from typing import List
@@ -14,6 +16,9 @@ def add_box(db: Session, box: schemas.BoxCreate):
     """[Atomic] 添加盲盒"""
     data = box.dict()
     data['status'] = False
+    data['rank'] = 1
+    data['last_put_time'] = int(time.time())
+
     try:
         print(data)
         db_box = models.Box(**data)
@@ -24,17 +29,29 @@ def add_box(db: Session, box: schemas.BoxCreate):
         raise e
     return db_box
 
+def reset_visitor(db: Session, visitor_id: str):
+    """[Atomic] 重置访客"""
+    db.query(models.Box).filter(models.Box.depositor_id == visitor_id).update({
+        'status': False,
+        'extractor_id': None,
+        'rank': 1,
+        'last_put_time': int(time.time())
+    })
+    db.commit()
+    return True
 
 def update_box(db: Session, box_id: int, visitor_id: str):
-    """[Atomic] 更新盲盒"""
+    """[Atomic] 更新被抽取盲盒"""
     db.query(models.Box).filter(models.Box.id == box_id).update({'status': True, 'extractor_id': visitor_id})
     db.commit()
     return True
 
 
-def get_visitor_extract_number(db: Session, visitor_id: str):
-    """获取访客抽取次数"""
-    return db.query(models.Box).filter(models.Box.extractor_id == visitor_id).count()
+def update_visitor(db: Session, visitor_id: str):
+    """[Atomic] 访客抽取过后，需要更新访客的信息"""
+    db.query(models.Box).filter(models.Box.depositor_id == visitor_id).update({'rank': models.Box.rank - 1})
+    db.commit()
+    return True
 
 
 def get_visitor_data(db: Session, visitor_id: str):
@@ -76,4 +93,7 @@ def get_available_box_for_visitor(db: Session, visitor_id: str):
     result = {'age': res.age, 'gender': res.gender, 'wechat': res.wechat}
     # 更新盲盒信息
     update_box(db, res.id, visitor_id)
+    # 更新访客信息
+    update_visitor(db, visitor_id)
+
     return result

@@ -11,7 +11,6 @@ class BoxCreate(BaseModel):
     age: int = Field(..., description="年龄")
     depositor_id: str = Field(..., description="访问者id")
 
-
 class Response(BaseModel):
     code: Optional[int] = 0
     msg: Optional[str]  = "ok"
@@ -69,3 +68,6 @@ class UserRegister(UserBase):
         if len(v) < 6 or len(v) > 16:
             raise ValueError('must be between 6 and 16 characters')
         return v
+
+class VisitorID(BaseModel):
+    visitor_id: str = Field(..., description="访客id")
