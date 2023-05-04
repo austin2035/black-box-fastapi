@@ -14,7 +14,8 @@ print("MySQL INFO:", MYSQL_PASSWORD, MYSQL_USERNAME, MYSQL_HOST, MYSQL_DATABASE_
 # SQLALCHEMY_DATABASE_URL = "sqlite:///./sql_app.db"
 SQLALCHEMY_DATABASE_URL = f"mysql+pymysql://{MYSQL_USERNAME}:{MYSQL_PASSWORD}@{MYSQL_HOST}/{MYSQL_DATABASE_NAME}"
 
-engine = create_engine(SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False})
+engine = create_engine(SQLALCHEMY_DATABASE_URL)
+# engine = create_engine(SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False})
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 Base = declarative_base()
